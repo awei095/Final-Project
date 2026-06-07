@@ -163,6 +163,9 @@ SYSTEM_PROMPTS = {
     "gentle": """\
 【強制規則】
 1. 全程使用繁體中文，禁止出現任何英文句子。
+0. 【最高優先】回覆總字數絕對不可超過120字，超過即視為失敗。
+0. 【最高優先】回覆總字數絕對不可超過100字，超過即視為失敗。
+0. 【最高優先】回覆總字數絕對不可超過100字，超過即視為失敗。
 2. 回覆結尾必須附上：「本次諮商參考：[來源1]、[來源2]」
 3. 嚴格依照格式要求輸出，不可省略任何步驟。
 
@@ -174,13 +177,13 @@ SYSTEM_PROMPTS = {
 - 絕對不說教，不使用「你應該」、「你不能」等強迫語氣
 - 用問句引導對方自己思考，而不是直接給答案
 - 結尾留有餘地，尊重對方最終的選擇
-- 回覆長度：150-200字，語氣像在茶館聊天
+- 回覆長度：300-400字，語氣像在茶館聊天
 
 格式要求：
 1. 開頭一句話表示理解對方的感受
 2. 中段融入2-3個哲學或心理學觀點（自然融入，不要像在上課）
 3. 結尾提出一個溫和的問句讓對方思考
-4. 【必須】總字數不超過200字
+4. 【必須】總字數不少於300字
 5. 【必須】最後一行格式固定為：本次諮商參考：[來源1]、[來源2]
 """,
     "sharp": """\
@@ -198,14 +201,14 @@ SYSTEM_PROMPTS = {
 - 精準拆解商家的行銷套路，讓對方看穿那些話術
 - 可以用比喻、類比，讓道理更生動
 - 不溫柔，但也不殘忍；是針，但是消毒過的那種
-- 回覆長度：150-200字，像在跟老朋友說真心話
+- 回覆長度：300-400字，像在跟老朋友說真心話
 
 格式要求：
 1. 開頭一句點破現象（可以稍微誇張，製造反差感）
 2. 中段用2-3個具體的行為經濟學或哲學概念拆解這次的消費動機
 3. 拋出一個讓人啞然失笑但又無法反駁的比喻或問題
 4. 結尾給一個具體的替代建議
-5. 【必須】總字數不超過200字
+5. 【必須】總字數不少於300字
 6. 【必須】最後一行格式固定為：本次諮商參考：[來源1]、[來源2]
 """,
     "brutal": """\
@@ -224,14 +227,14 @@ SYSTEM_PROMPTS = {
 - 擅長用尖銳的問句讓對方看見自己行為背後的無意識動機
 - 偶爾引用哲人的話，但要自然融入，不要像在背書
 - 結尾要有震撼感，讓人讀完後需要深呼吸一下
-- 回覆長度：200-250字，像一篇微型哲學判決書
+- 回覆長度：400-500字，像一篇微型哲學判決書
 
 格式要求：
 1. 開頭一句話直擊本質
 2. 中段深入解析心理機制，至少引用2個哲學/心理學概念
 3. 提出3個連續的追問，讓對方逐步剝開欲望的偽裝
 4. 結尾一個有份量的哲學陳述，作為整篇的判決
-5. 【必須】總字數不超過250字
+5. 【必須】總字數不少於400字
 6. 【必須】最後一行格式固定為：本次諮商參考：[來源1]、[來源2]、[來源3]
 """,
 }
@@ -250,7 +253,7 @@ def build_user_message(payload: dict) -> str:
 ---
 
 請根據以上資訊，以你的身份生成反向推銷回覆。
-回覆必須使用繁體中文，並在結尾標注參考來源。"""
+【重要】回覆必須簡短精準，100字以內，繁體中文，結尾標注來源。"""
 
 
 def extract_citations(response_text: str) -> list:
@@ -258,13 +261,8 @@ def extract_citations(response_text: str) -> list:
     match = re.search(pattern, response_text)
     if match:
         raw = match.group(1)
-        # 清除括號、方括號、書名號、多餘空白
-        sources = [
-            s.strip().strip("【】[]《》「」").strip()
-            for s in re.split(r"[、,，]", raw)
-        ]
-        return [s for s in sources if s and len(s) > 1]
-    # 若沒有標注，嘗試從 RAG 來源自動取得
+        sources = [s.strip().strip("【】[]") for s in re.split(r"[、,，]", raw)]
+        return [s for s in sources if s]
     return []
 
 
@@ -281,14 +279,37 @@ def generate_response(payload: dict) -> dict:
                     {"role": "system", "content": SYSTEM_PROMPTS[mode]},
                     {"role": "user", "content": build_user_message(payload)},
                 ],
-                max_tokens=4096,
+                max_tokens=512,
                 temperature=0.85,
             )
             response_text = response.choices[0].message.content
+
+            # 截短回覆到150字以內（保留完整句子）
+            if len(response_text) > 200:
+                # 找最後一個句號截斷
+                cutoff = response_text[:180].rfind('。')
+                if cutoff > 50:
+                    # 保留引用來源那行
+                    cite_match = re.search(r'本次諮商參考[：:].*', response_text)
+                    cite_line = cite_match.group(0) if cite_match else ''
+                    response_text = response_text[:cutoff+1]
+                    if cite_line:
+                        response_text += '\n' + cite_line
+
+            # 把佔位符 [來源1]、[來源2] 換成真實來源
+            real_sources = payload.get("retrieved_sources", [])
+            for i, source in enumerate(real_sources, 1):
+                response_text = response_text.replace(f'[來源{i}]', source)
+                response_text = response_text.replace(f'來源{i}', source)
+
+            citations = extract_citations(response_text)
+            if not citations:
+                citations = real_sources
+
             return {
                 "response_text": response_text,
                 "mode": mode,
-                "citations": extract_citations(response_text),
+                "citations": citations,
                 "intent_type": payload.get("intent_type"),
                 "warning_flag": payload.get("warning_flag"),
                 "token_usage": {
@@ -335,7 +356,4 @@ def analyze(req: AnalyzeRequest):
         raise HTTPException(status_code=400, detail="mode 必須是 gentle / sharp / brutal")
     payload = build_rag_payload(req.product, req.reason, req.mode)
     result = generate_response(payload)
-    # 若 AI 沒有標注來源，使用 RAG 檢索到的來源作為備援
-    if not result.get("citations"):
-        result["citations"] = payload.get("retrieved_sources", [])
     return result
