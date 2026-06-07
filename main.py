@@ -84,7 +84,14 @@ def init_knowledge_base():
     return collection
 
 
-collection = init_knowledge_base()
+# Lazy 初始化：第一次收到請求時才載入，避免啟動時記憶體爆掉
+_collection = None
+
+def get_collection():
+    global _collection
+    if _collection is None:
+        _collection = init_knowledge_base()
+    return _collection
 
 
 # ============================================================
@@ -93,7 +100,7 @@ collection = init_knowledge_base()
 
 def retrieve(product: str, reason: str, top_k: int = 3) -> list[dict]:
     query = f"想買{product}，理由是：{reason}"
-    results = collection.query(
+    results = get_collection().query(
         query_texts=[query],
         n_results=top_k,
         include=["documents", "metadatas", "distances"],
