@@ -174,13 +174,13 @@ SYSTEM_PROMPTS = {
 - 絕對不說教，不使用「你應該」、「你不能」等強迫語氣
 - 用問句引導對方自己思考，而不是直接給答案
 - 結尾留有餘地，尊重對方最終的選擇
-- 回覆長度：300-400字，語氣像在茶館聊天
+- 回覆長度：150-200字，語氣像在茶館聊天
 
 格式要求：
 1. 開頭一句話表示理解對方的感受
 2. 中段融入2-3個哲學或心理學觀點（自然融入，不要像在上課）
 3. 結尾提出一個溫和的問句讓對方思考
-4. 【必須】總字數不少於300字
+4. 【必須】總字數不超過200字
 5. 【必須】最後一行格式固定為：本次諮商參考：[來源1]、[來源2]
 """,
     "sharp": """\
@@ -198,14 +198,14 @@ SYSTEM_PROMPTS = {
 - 精準拆解商家的行銷套路，讓對方看穿那些話術
 - 可以用比喻、類比，讓道理更生動
 - 不溫柔，但也不殘忍；是針，但是消毒過的那種
-- 回覆長度：300-400字，像在跟老朋友說真心話
+- 回覆長度：150-200字，像在跟老朋友說真心話
 
 格式要求：
 1. 開頭一句點破現象（可以稍微誇張，製造反差感）
 2. 中段用2-3個具體的行為經濟學或哲學概念拆解這次的消費動機
 3. 拋出一個讓人啞然失笑但又無法反駁的比喻或問題
 4. 結尾給一個具體的替代建議
-5. 【必須】總字數不少於300字
+5. 【必須】總字數不超過200字
 6. 【必須】最後一行格式固定為：本次諮商參考：[來源1]、[來源2]
 """,
     "brutal": """\
@@ -224,14 +224,14 @@ SYSTEM_PROMPTS = {
 - 擅長用尖銳的問句讓對方看見自己行為背後的無意識動機
 - 偶爾引用哲人的話，但要自然融入，不要像在背書
 - 結尾要有震撼感，讓人讀完後需要深呼吸一下
-- 回覆長度：400-500字，像一篇微型哲學判決書
+- 回覆長度：200-250字，像一篇微型哲學判決書
 
 格式要求：
 1. 開頭一句話直擊本質
 2. 中段深入解析心理機制，至少引用2個哲學/心理學概念
 3. 提出3個連續的追問，讓對方逐步剝開欲望的偽裝
 4. 結尾一個有份量的哲學陳述，作為整篇的判決
-5. 【必須】總字數不少於400字
+5. 【必須】總字數不超過250字
 6. 【必須】最後一行格式固定為：本次諮商參考：[來源1]、[來源2]、[來源3]
 """,
 }
@@ -258,8 +258,13 @@ def extract_citations(response_text: str) -> list:
     match = re.search(pattern, response_text)
     if match:
         raw = match.group(1)
-        sources = [s.strip().strip("【】[]") for s in re.split(r"[、,，]", raw)]
-        return [s for s in sources if s]
+        # 清除括號、方括號、書名號、多餘空白
+        sources = [
+            s.strip().strip("【】[]《》「」").strip()
+            for s in re.split(r"[、,，]", raw)
+        ]
+        return [s for s in sources if s and len(s) > 1]
+    # 若沒有標注，嘗試從 RAG 來源自動取得
     return []
 
 
@@ -330,4 +335,7 @@ def analyze(req: AnalyzeRequest):
         raise HTTPException(status_code=400, detail="mode 必須是 gentle / sharp / brutal")
     payload = build_rag_payload(req.product, req.reason, req.mode)
     result = generate_response(payload)
+    # 若 AI 沒有標注來源，使用 RAG 檢索到的來源作為備援
+    if not result.get("citations"):
+        result["citations"] = payload.get("retrieved_sources", [])
     return result
