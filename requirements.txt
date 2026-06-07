@@ -2,5 +2,5 @@ fastapi
 uvicorn
 chromadb
 sentence-transformers
-google-genai
+openai
 pydantic

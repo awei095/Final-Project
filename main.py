@@ -10,20 +10,22 @@ import time
 
 import chromadb
 from chromadb.utils import embedding_functions
-import google.genai as genai
-from google.genai import types
+from openai import OpenAI
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-# ── 環境變數取得 API 金鑰（不要把金鑰寫在程式碼裡）──
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
-if not GEMINI_API_KEY:
-    raise RuntimeError("請設定環境變數 GEMINI_API_KEY")
+# ── 環境變數取得 GitHub Token ──
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN", "")
+if not GITHUB_TOKEN:
+    raise RuntimeError("請設定環境變數 GITHUB_TOKEN")
 
-# ── Gemini 初始化 ──
-gemini_client = genai.Client(api_key=GEMINI_API_KEY)
-MODEL = "gemini-2.5-flash"
+# ── GitHub Models 初始化 ──
+github_client = OpenAI(
+    base_url="https://models.inference.ai.azure.com",
+    api_key=GITHUB_TOKEN,
+)
+MODEL = "gpt-4o-mini"
 
 # ── ChromaDB 初始化 ──
 DB_PATH = "./chroma_db"
@@ -260,23 +262,18 @@ def generate_response(payload: dict) -> dict:
     if mode not in SYSTEM_PROMPTS:
         raise ValueError(f"不支援的模式：{mode}")
 
-    full_prompt = SYSTEM_PROMPTS[mode] + "\n\n" + build_user_message(payload)
-
     for attempt in range(3):
         try:
-            response = gemini_client.models.generate_content(
+            response = github_client.chat.completions.create(
                 model=MODEL,
-                contents=full_prompt,
-                config=types.GenerateContentConfig(
-                    max_output_tokens=4096,
-                    temperature=0.85,
-                ),
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPTS[mode]},
+                    {"role": "user", "content": build_user_message(payload)},
+                ],
+                max_tokens=4096,
+                temperature=0.85,
             )
-            response_text = "".join(
-                part.text
-                for part in response.candidates[0].content.parts
-                if hasattr(part, "text")
-            )
+            response_text = response.choices[0].message.content
             return {
                 "response_text": response_text,
                 "mode": mode,
@@ -284,8 +281,8 @@ def generate_response(payload: dict) -> dict:
                 "intent_type": payload.get("intent_type"),
                 "warning_flag": payload.get("warning_flag"),
                 "token_usage": {
-                    "input": response.usage_metadata.prompt_token_count,
-                    "output": response.usage_metadata.candidates_token_count,
+                    "input": response.usage.prompt_tokens,
+                    "output": response.usage.completion_tokens,
                 },
             }
         except Exception as e:
