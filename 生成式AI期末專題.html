@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>物慾退燒指南 — 反消費主義哲學諮商</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700&family=Noto+Sans+TC:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+input,textarea{font-family:inherit;}
+
+/* ── tokens ── */
+:root{
+  --bg:#1a1510;--bg2:#241e16;--bg3:#2e2618;
+  --b1:#3a342a;--b2:#4a4438;
+  --t1:#e0dbd0;--t2:#c8c0b0;--t3:#8a8070;--t4:#6a6058;--t5:#4a4438;
+  --acc:#c8a96e;--acc2:#d4b87a;--acc-bg:#241e16;--acc-dim:#c8a96e33;
+  --btn-txt:#2a2218;
+  --green-bg:#1a2e18;--green:#5aab3a;
+  --warn-bg:#2e1a18;--warn-b:#8a3a30;--warn-t:#c87060;--warn-i:#c85a48;
+  --page-bg:#111009;--zz:#1a1510;
+}
+[data-theme=light]{
+  --bg:#faf8f2;--bg2:#f5f0e6;--bg3:#ede8db;
+  --b1:#d4cfc4;--b2:#c4bfb4;
+  --t1:#2a2218;--t2:#3d3328;--t3:#5a5040;--t4:#9a9080;--t5:#b0a898;
+  --acc:#2a2218;--acc2:#3d3328;--acc-bg:#f0ebe0;--acc-dim:#2a221833;
+  --btn-txt:#f0ebe0;
+  --green-bg:#e8f5e0;--green:#3B6D11;
+  --warn-bg:#faece7;--warn-b:#d4a090;--warn-t:#993c1d;--warn-i:#d85a30;
+  --page-bg:#eee8dc;--zz:#faf8f2;
+}
+
+html,body{min-height:100vh;background:var(--page-bg);transition:background .25s;}
+body{font-family:'Noto Sans TC',sans-serif;display:flex;flex-direction:column;align-items:center;padding:32px 16px 64px;}
+
+/* ══════════════════════════
+   WELCOME PAGE
+══════════════════════════ */
+#welcome{
+  width:100%;max-width:580px;
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;
+  animation:fadeUp .6s ease both;
+  cursor:pointer;
+  user-select:none;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+.w-topbar{
+  width:100%;display:flex;align-items:center;
+  justify-content:flex-end;margin-bottom:48px;
+}
+.toggle-wrap{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--t4);}
+.toggle-track{width:42px;height:23px;border-radius:12px;background:var(--b1);border:.5px solid var(--b2);position:relative;cursor:pointer;flex-shrink:0;}
+.toggle-knob{position:absolute;top:3px;left:3px;width:17px;height:17px;border-radius:50%;background:var(--acc);transition:left .2s;}
+[data-theme=light] .toggle-knob{left:22px;}
+
+.w-badge{
+  display:inline-block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--acc);background:var(--acc-bg);border:.5px solid var(--acc-dim);
+  padding:6px 16px;border-radius:20px;margin-bottom:28px;
+  font-family:'JetBrains Mono',monospace;
+}
+.w-title{
+  font-family:'Noto Serif TC',serif;
+  font-size:42px;font-weight:700;color:var(--t1);
+  line-height:1.25;margin-bottom:14px;letter-spacing:.04em;
+}
+.w-sub{
+  font-size:16px;color:var(--t3);line-height:1.85;
+  margin-bottom:48px;max-width:420px;
+}
+
+/* 三張模式說明卡 */
+.w-modes{display:flex;gap:12px;width:100%;margin-bottom:48px;}
+.w-card{
+  flex:1;background:var(--bg2);border:.5px solid var(--b1);
+  border-radius:10px;padding:22px 12px 18px;text-align:center;
+  transition:border-color .2s,background .2s;
+}
+.w-card:hover{background:var(--bg3);border-color:var(--b2);}
+.wc-icon{font-size:28px;display:block;margin-bottom:10px;}
+.wc-name{font-size:14px;font-weight:500;color:var(--t2);display:block;margin-bottom:6px;}
+.wc-desc{font-size:12px;color:var(--t4);line-height:1.6;}
+
+/* 引言 */
+.w-quote-wrap{
+  width:100%;max-width:420px;
+  border-top:1.5px dashed var(--b1);border-bottom:1.5px dashed var(--b1);
+  padding:24px 0;margin-bottom:40px;
+}
+.w-quote{
+  font-family:'Noto Serif TC',serif;
+  font-size:14px;color:var(--t3);line-height:1.9;font-style:italic;
+  margin-bottom:8px;
+}
+.w-quote-src{font-size:12px;color:var(--t5);font-family:'JetBrains Mono',monospace;}
+
+.w-tap-hint{
+  font-size:13px;color:var(--t5);
+  letter-spacing:.08em;text-transform:uppercase;
+  font-family:'JetBrains Mono',monospace;
+  animation:pulse 2s ease-in-out infinite;
+  margin-top:4px;
+}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+/* ══════════════════════════
+   MAIN APP — two-column layout
+══════════════════════════ */
+#app{width:100%;display:none;flex-direction:column;align-items:center;}
+#app.active{display:flex;animation:fadeUp .4s ease both;}
+
+/* topbar spans full width inside app */
+.app-topbar-row{width:100%;max-width:1100px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding:0 8px;}
+
+/* two-column content row */
+.app-content-row{
+  width:100%;max-width:1100px;
+  display:flex;
+  align-items:flex-start;
+  gap:28px;
+  padding:0 8px;
+}
+
+/* Left savings column — hidden on small screens */
+.savings-col{
+  width:252px;flex-shrink:0;
+  position:sticky;top:24px;
+  display:none;
+}
+
+/* Main panel column */
+.main-col{flex:1;min-width:0;max-width:520px;}
+
+.topbar{width:100%;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.topbar-left{display:flex;align-items:center;gap:10px;}
+.back-btn{font-size:13px;color:var(--t4);display:flex;align-items:center;gap:5px;transition:color .15s;}
+.back-btn:hover{color:var(--t2);}
+.back-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.topbar-title{font-family:'Noto Serif TC',serif;font-size:14px;color:var(--t4);letter-spacing:.04em;}
+
+.nav-tabs{width:100%;display:flex;border:.5px solid var(--b1);border-radius:6px;overflow:hidden;margin-bottom:16px;}
+.tab{flex:1;padding:12px 6px;text-align:center;font-size:13px;color:var(--t4);cursor:pointer;background:var(--bg2);border-right:.5px solid var(--b1);display:flex;align-items:center;justify-content:center;gap:6px;transition:background .15s,color .15s;user-select:none;}
+.tab:last-child{border-right:none;}
+.tab.active{background:var(--acc);color:var(--btn-txt);font-weight:500;}
+.tab svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+
+.wrap{width:100%;}
+.panel{display:none;}
+.panel.active{display:block;}
+.receipt{background:var(--bg);border:.5px solid var(--b1);border-bottom:none;border-radius:2px 2px 0 0;padding:28px 28px 0;transition:background .2s,border-color .2s;}
+.receipt-zigzag{height:14px;background-color:var(--zz);background-image:radial-gradient(circle at 0 0,transparent 8px,var(--zz) 8px),radial-gradient(circle at 100% 0,transparent 8px,var(--zz) 8px);background-size:16px 14px;background-repeat:repeat-x;border-left:.5px solid var(--b1);border-right:.5px solid var(--b1);border-bottom:.5px solid var(--b1);border-radius:0 0 2px 2px;transition:background-color .2s,border-color .2s;}
+
+.receipt-header{text-align:center;padding-bottom:18px;border-bottom:1.5px dashed var(--b1);margin-bottom:20px;}
+.logo-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:4px;}
+.logo-icon{font-size:22px;}
+.store-name{font-family:'Noto Serif TC',serif;font-size:20px;font-weight:500;color:var(--t1);letter-spacing:.06em;}
+.store-sub{font-size:13px;color:var(--t4);margin-top:3px;}
+
+.sec-title{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--t4);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;}
+.sec-title svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+
+/* mode pills */
+.mode-row{display:flex;gap:10px;margin-bottom:22px;}
+.mode-pill{flex:1;padding:14px 6px 12px;border-radius:4px;border:1px solid var(--b1);background:var(--bg2);text-align:center;cursor:pointer;position:relative;transition:background .15s,border-color .15s;user-select:none;}
+.mode-pill:hover{background:var(--bg3);}
+.mode-pill.active{background:var(--acc);border-color:var(--acc);}
+.pill-icon{font-size:22px;display:block;margin-bottom:6px;}
+.pill-name{font-size:13px;font-weight:500;display:block;color:var(--t4);}
+.mode-pill.active .pill-name{color:var(--btn-txt);}
+.pill-en{font-size:11px;font-family:'JetBrains Mono',monospace;display:block;color:var(--t5);margin-top:3px;}
+.mode-pill.active .pill-en{color:var(--btn-txt);opacity:.65;}
+.pill-desc{font-size:11px;color:var(--t5);display:block;margin-top:3px;}
+.mode-pill.active .pill-desc{color:var(--btn-txt);opacity:.65;}
+.mode-badge{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--acc);color:var(--btn-txt);font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;white-space:nowrap;}
+[data-theme=light] .mode-badge{background:#2a2218;color:#f0ebe0;}
+
+/* fields */
+.field-row{margin-bottom:18px;}
+.field-label{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--t4);margin-bottom:7px;}
+.field-label svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.field-input,.field-textarea{width:100%;background:transparent;border:none;border-bottom:1px dashed var(--b2);padding:8px 2px;font-size:15px;font-family:'JetBrains Mono',monospace;color:var(--t2);outline:none;resize:none;transition:border-color .15s;}
+.field-input::placeholder,.field-textarea::placeholder{color:var(--b2);}
+.field-input:focus,.field-textarea:focus{border-bottom-color:var(--acc);}
+.field-textarea{height:72px;display:block;}
+
+.divider{border-top:1.5px dashed var(--b1);margin:18px 0;}
+
+.sum-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:9px;}
+.s-lbl{display:flex;align-items:center;gap:5px;color:var(--t4);}
+.s-lbl svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.s-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--t3);}
+.sum-total{display:flex;justify-content:space-between;align-items:center;font-size:15px;font-weight:500;color:var(--t1);padding-top:11px;border-top:1px solid var(--b1);margin-top:6px;margin-bottom:18px;}
+.free-badge{font-size:12px;padding:4px 11px;border-radius:20px;font-weight:500;background:var(--green-bg);color:var(--green);display:inline-flex;align-items:center;gap:4px;}
+
+.error-box{display:none;background:var(--warn-bg);border:.5px solid var(--warn-b);border-radius:4px;padding:10px 14px;font-size:13px;color:var(--warn-t);line-height:1.6;margin-bottom:14px;}
+.error-box.show{display:block;}
+
+.submit-btn{width:100%;padding:14px;border-radius:4px;font-size:15px;font-weight:500;letter-spacing:.03em;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px;background:var(--acc);color:var(--btn-txt);transition:background .15s,transform .1s;}
+.submit-btn:hover{background:var(--acc2);}
+.submit-btn:active{transform:scale(.99);}
+.submit-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+
+.timer-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:18px;}
+.timer-lbl{font-size:13px;color:var(--t4);display:flex;align-items:center;gap:5px;}
+.timer-lbl svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.timer-disp{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:500;color:var(--acc);background:var(--acc-bg);padding:4px 10px;border-radius:3px;}
+.disclaimer{text-align:center;font-size:12px;color:var(--t5);padding-bottom:24px;line-height:1.7;}
+
+/* ── loading ── */
+.loading-wrap{padding:40px 20px 32px;text-align:center;}
+.think-icon{font-size:40px;display:block;margin-bottom:18px;}
+.think-title{font-family:'Noto Serif TC',serif;font-size:18px;color:var(--t1);margin-bottom:8px;}
+.think-sub{font-size:14px;color:var(--t4);margin-bottom:28px;line-height:1.8;}
+.prog-track{width:100%;height:3px;background:var(--b1);border-radius:2px;overflow:hidden;margin-bottom:22px;}
+.prog-inner{height:100%;background:var(--acc);border-radius:2px;animation:prog 2.4s ease-in-out infinite;}
+@keyframes prog{0%{width:0%;margin-left:0%}50%{width:60%;margin-left:20%}100%{width:0%;margin-left:100%}}
+.step-item{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--t4);padding:9px 0;border-bottom:.5px solid var(--b1);}
+.step-item:last-child{border-bottom:none;}
+.step-item svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+.step-item.done{color:var(--t3);}
+.step-item.done svg{stroke:var(--green);}
+.step-item.cur{color:var(--acc);}
+.step-item.cur svg{stroke:var(--acc);}
+
+/* ── response ── */
+.resp-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
+.mode-tag{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;background:var(--acc-bg);color:var(--acc);padding:5px 13px;border-radius:20px;border:.5px solid var(--acc-dim);}
+.mode-tag svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.redo-btn{font-size:13px;color:var(--t4);border:.5px solid var(--b1);border-radius:4px;padding:5px 11px;display:flex;align-items:center;gap:5px;transition:background .15s,color .15s;}
+.redo-btn:hover{background:var(--bg2);color:var(--t2);}
+.redo-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.intent-tag{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--t3);background:var(--bg2);border:.5px solid var(--b1);padding:5px 13px;border-radius:20px;margin-bottom:14px;}
+.intent-tag svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.warn-box{display:flex;align-items:flex-start;gap:9px;background:var(--warn-bg);border:.5px solid var(--warn-b);border-radius:4px;padding:11px 13px;margin-bottom:14px;}
+.warn-box svg{width:16px;height:16px;stroke:var(--warn-i);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;margin-top:1px;}
+.warn-txt{font-size:13px;color:var(--warn-t);line-height:1.7;}
+
+/* ── chat bubbles ── */
+.chat-area{max-height:380px;overflow-y:auto;margin-bottom:14px;padding-right:2px;}
+.chat-area::-webkit-scrollbar{width:3px;}
+.chat-area::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px;}
+.bubble-wrap{margin-bottom:16px;}
+.bubble-role{font-size:12px;color:var(--t4);margin-bottom:5px;display:flex;align-items:center;gap:5px;}
+.bubble-role svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.bubble{font-size:14px;color:var(--t2);line-height:1.9;background:var(--bg2);border:.5px solid var(--b1);border-radius:4px;padding:12px 14px;}
+.bubble.user{background:var(--acc-bg);border-color:var(--acc-dim);color:var(--t3);font-family:'JetBrains Mono',monospace;font-size:13px;}
+.cursor{display:inline-block;width:2px;height:15px;background:var(--acc);vertical-align:text-bottom;animation:blink .9s step-end infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* ── citations ── */
+.cite-title{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--t4);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;}
+.cite-title svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.cite-item{display:flex;align-items:flex-start;gap:8px;padding:9px 0;border-bottom:.5px solid var(--b1);font-size:13px;color:var(--t3);line-height:1.6;}
+.cite-item:last-child{border-bottom:none;}
+.cite-item svg{width:14px;height:14px;stroke:var(--t5);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;margin-top:2px;}
+.cite-src{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--acc);display:block;margin-top:3px;}
+
+/* ── followup ── */
+.followup-area{margin-top:14px;padding-top:14px;border-top:1.5px dashed var(--b1);}
+.followup-label{font-size:12px;color:var(--t4);margin-bottom:8px;display:flex;align-items:center;gap:5px;}
+.followup-label svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.followup-row{display:flex;gap:8px;align-items:flex-end;}
+.followup-input{flex:1;background:var(--bg2);border:.5px solid var(--b1);border-radius:4px;padding:10px 12px;font-size:13px;color:var(--t2);outline:none;resize:none;height:52px;transition:border-color .15s;}
+.followup-input::placeholder{color:var(--t5);}
+.followup-input:focus{border-color:var(--acc);}
+.followup-send{width:44px;height:44px;border-radius:4px;background:var(--acc);color:var(--btn-txt);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s;}
+.followup-send:hover{background:var(--acc2);}
+.followup-send svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.followup-hint{font-size:11px;color:var(--t5);margin-top:6px;}
+
+/* ── action row ── */
+.action-row{display:flex;gap:8px;margin:16px 0;}
+.act-btn{flex:1;padding:11px 5px;border-radius:4px;border:.5px solid var(--b1);background:var(--bg2);font-size:13px;color:var(--t3);display:flex;align-items:center;justify-content:center;gap:5px;transition:background .15s,color .15s;}
+.act-btn:hover{background:var(--bg3);color:var(--t2);}
+.act-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.act-btn.pri{background:var(--acc);color:var(--btn-txt);border-color:var(--acc);}
+.act-btn.pri:hover{background:var(--acc2);}
+
+/* ── 最終決策區 ── */
+.decision-section{margin-top:18px;padding-top:18px;border-top:1.5px dashed var(--b1);display:none;}
+.decision-section.show{display:block;}
+.decision-label{font-size:12px;font-weight:500;color:var(--t4);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.decision-label svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.decision-btns{display:flex;gap:10px;}
+.dec-btn{flex:1;padding:16px 8px;border-radius:6px;font-size:14px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;border:1.5px solid transparent;transition:all .2s;line-height:1.4;text-align:center;}
+.dec-btn-icon{font-size:24px;display:block;}
+.dec-btn.bought{background:var(--warn-bg);border-color:var(--warn-b);color:var(--warn-t);}
+.dec-btn.bought:hover{background:var(--warn-bg);border-color:var(--warn-i);filter:brightness(.93);}
+.dec-btn.saved{background:var(--green-bg);border-color:var(--green);color:var(--green);}
+.dec-btn.saved:hover{background:var(--green-bg);filter:brightness(.93);}
+.dec-btn:active{transform:scale(.97);}
+
+/* ── 省錢記帳本（左側欄）── */
+.savings-board{width:100%;}
+.savings-card{
+  background:var(--bg);border:.5px solid var(--b1);
+  border-radius:6px;padding:20px 18px;
+  animation:fadeUp .35s ease both;
+}
+.savings-header{margin-bottom:14px;padding-bottom:14px;border-bottom:1.5px dashed var(--b1);}
+.savings-title{font-family:'Noto Serif TC',serif;font-size:15px;color:var(--t1);display:flex;align-items:center;gap:7px;margin-bottom:10px;}
+.savings-total-wrap{display:flex;justify-content:space-between;align-items:center;}
+.savings-total-lbl{font-size:11px;color:var(--t4);font-family:'JetBrains Mono',monospace;}
+.savings-total-val{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:500;color:var(--green);}
+.savings-count{font-size:11px;color:var(--t5);font-family:'JetBrains Mono',monospace;margin-top:4px;}
+.savings-empty{text-align:center;padding:24px 0;font-size:12px;color:var(--t5);font-style:italic;line-height:1.8;}
+.savings-list-scroll{max-height:420px;overflow-y:auto;padding-right:2px;}
+.savings-list-scroll::-webkit-scrollbar{width:3px;}
+.savings-list-scroll::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px;}
+.savings-item{
+  padding:10px 0;border-bottom:.5px solid var(--b1);
+  animation:fadeUp .3s ease both;
+}
+.savings-item:last-child{border-bottom:none;}
+.savings-item-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;margin-bottom:3px;}
+.savings-item-name{font-size:13px;color:var(--t2);font-weight:500;line-height:1.4;flex:1;}
+.savings-item-amt{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--green);font-weight:500;flex-shrink:0;white-space:nowrap;}
+.savings-item-date{font-size:10px;color:var(--t5);font-family:'JetBrains Mono',monospace;}
+.savings-item-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--green-bg);color:var(--green);
+  font-size:10px;font-weight:600;font-family:'JetBrains Mono',monospace;
+  flex-shrink:0;margin-right:4px;vertical-align:middle;
+}
+
+/* ── 防禦大回饋 Overlay ── */
+.celebrate-overlay{
+  position:fixed;inset:0;
+  z-index:10000;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(8px);
+  opacity:0;pointer-events:none;
+  transition:opacity .25s;
+}
+.celebrate-overlay.show{opacity:1;pointer-events:auto;}
+.celebrate-box{
+  background:var(--bg);
+  border:2px solid var(--green);
+  border-radius:20px;
+  padding:32px 28px 28px;
+  text-align:center;
+  max-width:340px;
+  width:90%;
+  position:relative;
+  transform:scale(.82) translateY(24px);
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 8px 60px rgba(0,0,0,.4);
+}
+.celebrate-overlay.show .celebrate-box{transform:scale(1) translateY(0);}
+.celebrate-emoji{
+  font-size:52px;display:block;margin-bottom:12px;
+}
+.celebrate-title{
+  font-family:'Noto Serif TC',serif;
+  font-size:18px;font-weight:700;
+  color:var(--green);
+  margin-bottom:8px;
+  line-height:1.3;
+}
+.celebrate-subtitle{
+  font-size:12px;color:var(--t3);line-height:1.85;
+  margin-bottom:4px;white-space:pre-line;
+}
+.celebrate-quote{
+  font-family:'Noto Serif TC',serif;
+  font-size:12px;color:var(--t2);
+  line-height:1.8;font-style:italic;
+  background:var(--bg2);border:.5px solid var(--b1);
+  border-radius:6px;padding:10px 14px;
+  margin:12px 0 4px;text-align:left;
+}
+.celebrate-quote-src{
+  font-size:10px;color:var(--acc);
+  font-family:'JetBrains Mono',monospace;
+  font-style:normal;display:block;margin-top:5px;
+  text-align:right;
+}
+.celebrate-saved-amt{
+  font-family:'JetBrains Mono',monospace;
+  font-size:26px;font-weight:700;
+  margin:12px 0 2px;
+}
+.celebrate-saved-lbl{
+  font-size:11px;color:var(--t4);
+  font-family:'JetBrains Mono',monospace;
+  margin-bottom:18px;
+}
+.celebrate-close{
+  width:100%;padding:12px;border-radius:10px;
+  font-size:13px;font-weight:600;font-family:inherit;
+  cursor:pointer;border:none;color:#fff;
+  background:#5aab3a;
+  transition:opacity .15s,transform .1s;
+}
+.celebrate-close:hover{opacity:.85;}
+.celebrate-close:active{transform:scale(.97);}
+/* confetti */
+.confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:10001;overflow:hidden;}
+.confetti-piece{
+  position:absolute;top:-20px;
+  border-radius:2px;
+  animation:confettiFall linear forwards;
+}
+@keyframes confettiFall{
+  0%  {transform:translateY(0) rotate(0deg);opacity:1;}
+  80% {opacity:1;}
+  100%{transform:translateY(110vh) rotate(700deg);opacity:0;}
+}
+.owl-sprite{
+  position:fixed;bottom:24px;right:28px;
+  width:96px;height:96px;
+  cursor:pointer;
+  z-index:9999;
+  animation:owlFloat 3s ease-in-out infinite;
+  user-select:none;
+  filter:drop-shadow(0 4px 16px rgba(0,0,0,.45));
+  font-size:80px;
+  line-height:1;
+  display:flex;align-items:center;justify-content:center;
+}
+@keyframes owlFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+.owl-sprite:hover{animation:owlFloat 1s ease-in-out infinite;filter:drop-shadow(0 8px 20px rgba(200,169,110,.4));}
+.owl-sprite:active{transform:scale(.92);}
+.owl-bubble{
+  position:fixed;bottom:132px;right:28px;
+  max-width:220px;
+  background:var(--bg2);border:.5px solid var(--acc-dim);
+  border-radius:8px 8px 0 8px;
+  padding:11px 14px;
+  font-size:12px;color:var(--t2);line-height:1.75;
+  z-index:9998;
+  opacity:0;transform:scale(.85) translateY(10px);
+  transition:opacity .25s,transform .25s;
+  pointer-events:none;
+  font-family:'Noto Serif TC',serif;font-style:italic;
+}
+.owl-bubble.show{opacity:1;transform:scale(1) translateY(0);}
+.owl-bubble::after{
+  content:'';position:absolute;bottom:-8px;right:24px;
+  border:4px solid transparent;
+  border-top-color:var(--acc-dim);
+}
+.owl-tts-indicator{
+  display:inline-block;width:8px;height:8px;background:var(--green);
+  border-radius:50%;margin-right:6px;
+  animation:owlPulse .7s ease-in-out infinite alternate;
+}
+@keyframes owlPulse{from{opacity:.4}to{opacity:1}}
+
+/* ══════════════════════════
+   RWD
+══════════════════════════ */
+@media(min-width:820px){
+  .savings-col{display:block;}
+}
+@media(min-width:768px){
+  body{padding:48px 24px 72px;}
+  #welcome{max-width:560px;}
+  .w-title{font-size:48px;}
+  .w-sub{font-size:17px;}
+  .wc-name{font-size:15px;}
+  .wc-desc{font-size:13px;}
+  .w-enter-btn{font-size:17px;padding:20px;}
+  .receipt{padding:34px 34px 0;}
+  .store-name{font-size:22px;}
+  .store-sub{font-size:14px;}
+  .field-input,.field-textarea{font-size:16px;}
+  .field-textarea{height:80px;}
+  .bubble{font-size:15px;}
+  .chat-area{max-height:440px;}
+}
+@media(max-width:479px){
+  body{padding:16px 12px 40px;}
+  #welcome,.topbar,.nav-tabs,.wrap{max-width:100%;}
+  .w-title{font-size:30px;}
+  .w-sub{font-size:14px;}
+  .w-modes{gap:8px;}
+  .w-card{padding:16px 8px 14px;}
+  .wc-icon{font-size:22px;}
+  .wc-name{font-size:12px;}
+  .wc-desc{font-size:11px;}
+  .w-enter-btn{font-size:14px;padding:15px;}
+  .receipt{padding:20px 18px 0;}
+  .store-name{font-size:17px;}
+  .mode-row{gap:7px;}
+  .mode-pill{padding:11px 4px 9px;}
+  .pill-icon{font-size:18px;}
+  .pill-name{font-size:12px;}
+  .pill-en,.pill-desc{font-size:10px;}
+  .field-input,.field-textarea{font-size:14px;}
+  .field-textarea{height:62px;}
+  .tab{font-size:12px;padding:11px 4px;}
+  .think-title{font-size:16px;}
+  .think-sub{font-size:13px;}
+  .bubble{font-size:13px;padding:10px 12px;}
+}
+@media(max-width:360px){
+  .w-title{font-size:26px;}
+  .pill-en,.pill-desc{display:none;}
+  .w-modes{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════
+     WELCOME PAGE
+══════════════════════════ -->
+<div id="welcome" onclick="enterApp()">
+  <div class="w-topbar">
+    <div class="toggle-wrap">
+      <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:var(--t4);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <div class="toggle-track" onclick="event.stopPropagation();toggleTheme()" role="switch" aria-label="切換深色淺色模式">
+        <div class="toggle-knob"></div>
+      </div>
+      <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:var(--t4);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </div>
+  </div>
+
+  <div class="w-badge">Anti-Consumerism AI · 反消費主義哲學諮商</div>
+
+  <h1 class="w-title">物慾退燒指南</h1>
+  <p class="w-sub">你真的需要它，還是演算法說服了你？<br>告訴我你想買什麼，讓哲學替你冷靜一下。</p>
+
+  <div class="w-modes">
+    <div class="w-card">
+      <span class="wc-icon">🌿</span>
+      <span class="wc-name">溫柔勸退</span>
+      <span class="wc-desc">朋友式提醒<br>語氣溫和不評判</span>
+    </div>
+    <div class="w-card">
+      <span class="wc-icon">⚡</span>
+      <span class="wc-name">犀利點醒</span>
+      <span class="wc-desc">幽默諷刺<br>直擊消費盲點</span>
+    </div>
+    <div class="w-card">
+      <span class="wc-icon">🔥</span>
+      <span class="wc-name">靈魂拷問</span>
+      <span class="wc-desc">哲學重炮<br>毫不留情地質問</span>
+    </div>
+  </div>
+
+  <div class="w-quote-wrap">
+    <p class="w-quote">「人們購買的不是商品本身，<br>而是商品背後的符號差異——<br>那個購物車裡裝的，是你渴望成為的那個人。」</p>
+    <div class="w-quote-src">— Jean Baudrillard，《消費社會》</div>
+  </div>
+
+  <p class="w-tap-hint">— 點擊任何地方開始諮商 —</p>
+</div>
+
+<!-- ══════════════════════════
+     MAIN APP
+══════════════════════════ -->
+<div id="app">
+  <div class="app-topbar-row">
+    <div class="topbar-left">
+      <button class="back-btn" onclick="goWelcome()">
+        <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        返回
+      </button>
+      <span class="topbar-title">物慾退燒指南</span>
+    </div>
+    <div class="toggle-wrap">
+      <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:var(--t4);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <div class="toggle-track" onclick="toggleTheme()" role="switch" aria-label="切換深色淺色模式">
+        <div class="toggle-knob"></div>
+      </div>
+      <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:var(--t4);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </div>
+  </div>
+
+  <div class="app-content-row">
+
+    <!-- ★ 左側：省錢記帳本 -->
+    <div class="savings-col">
+      <div class="savings-board" id="savings-board">
+        <div class="savings-card">
+          <div class="savings-header">
+            <div class="savings-title">防禦成功清單</div>
+            <div class="savings-total-wrap">
+              <span class="savings-total-lbl">總計為你省下</span>
+              <span class="savings-total-val" id="savings-total">NT$ 0</span>
+            </div>
+            <div class="savings-count" id="savings-count">共 0 筆記錄</div>
+          </div>
+          <div class="savings-list-scroll" id="savings-list">
+            <div class="savings-empty" id="savings-empty">還沒有成功忍住的記錄。<br>第一筆等你來寫下！</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ★ 右側：主面板 -->
+    <div class="main-col">
+      <div class="wrap">
+
+    <!-- ① 輸入 -->
+    <div class="panel active" id="p0" role="tabpanel">
+      <div class="receipt">
+        <div class="receipt-header">
+          <div class="logo-row"><span class="logo-icon">🧾</span><span class="store-name">物慾退燒指南</span></div>
+          <div class="store-sub">反消費主義哲學諮商系統 · Anti-Consumerism AI</div>
+        </div>
+
+        <div class="sec-title">
+          <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          選擇諮商強度
+        </div>
+        <div class="mode-row">
+          <div class="mode-pill" id="m-gentle" onclick="selMode('gentle')">
+            <span class="pill-icon">🌿</span>
+            <span class="pill-name">溫柔勸退</span><span class="pill-en">gentle</span><span class="pill-desc">朋友式提醒</span>
+          </div>
+          <div class="mode-pill active" id="m-sharp" onclick="selMode('sharp')">
+            <div class="mode-badge">推薦</div>
+            <span class="pill-icon">⚡</span>
+            <span class="pill-name">犀利點醒</span><span class="pill-en">sharp</span><span class="pill-desc">幽默諷刺</span>
+          </div>
+          <div class="mode-pill" id="m-brutal" onclick="selMode('brutal')">
+            <span class="pill-icon">🔥</span>
+            <span class="pill-name">靈魂拷問</span><span class="pill-en">brutal</span><span class="pill-desc">哲學重炮</span>
+          </div>
+        </div>
+
+        <div class="sec-title">
+          <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          購買資訊
+        </div>
+        <div class="field-row">
+          <div class="field-label">
+            <svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+            你想買什麼
+          </div>
+          <input class="field-input" id="product" type="text" placeholder="例：AirPods Pro 第三代_"/>
+        </div>
+        <div class="field-row">
+          <div class="field-label">
+            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            購買理由
+          </div>
+          <textarea class="field-textarea" id="reason" placeholder="例：舊的壞了，而且現在剛好特價…_"></textarea>
+        </div>
+        <div class="field-row">
+          <div class="field-label">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            金額（選填，用於省錢統計）
+          </div>
+          <input class="field-input" id="price-input" type="number" min="0" placeholder="例：4990_" style="max-width:180px"/>
+        </div>
+
+        <div class="divider"></div>
+        <div class="sum-row">
+          <span class="s-lbl"><svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>諮商模式</span>
+          <span class="s-val" id="mode-disp">犀利點醒 (sharp)</span>
+        </div>
+        <div class="sum-row">
+          <span class="s-lbl"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>知識庫</span>
+          <span class="s-val">布希亞 · 斯多葛 · 行為經濟學</span>
+        </div>
+        <div class="sum-row">
+          <span class="s-lbl"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>冷靜期</span>
+          <span class="s-val">72 小時</span>
+        </div>
+        <div class="sum-total">
+          <span>諮商費用</span>
+          <span class="free-badge"><svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:var(--green);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><polyline points="20 6 9 17 4 12"/></svg>免費</span>
+        </div>
+
+        <div class="error-box" id="error-msg">請填寫商品名稱與購買理由後再送出。</div>
+        <button class="submit-btn" onclick="handleSubmit()">
+          <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          送出諮商
+        </button>
+        <div class="disclaimer">本系統採用 RAG 哲學文本檢索 · 不對您的後悔負責<br>請在衝動消散後再做決定</div>
+        <div style="text-align:center;margin-top:10px;display:flex;gap:8px;justify-content:center;">
+          <button onclick="showCelebrate('saved','測試商品',3990)" style="font-size:11px;color:var(--t5);background:none;border:.5px solid var(--b1);border-radius:4px;padding:4px 10px;cursor:pointer;">🧪 測試：忍住回饋</button>
+          <button onclick="showCelebrate('bought','測試商品',3990)" style="font-size:11px;color:var(--t5);background:none;border:.5px solid var(--b1);border-radius:4px;padding:4px 10px;cursor:pointer;">🧪 測試：買了回饋</button>
+        </div>
+      </div>
+      <div class="receipt-zigzag"></div>
+    </div>
+
+    <!-- ② 載入中 -->
+    <div class="panel" id="p1" role="tabpanel">
+      <div class="receipt">
+        <div class="receipt-header">
+          <div class="logo-row"><span class="logo-icon">🧾</span><span class="store-name">物慾退燒指南</span></div>
+          <div class="store-sub">反消費主義哲學諮商系統 · Anti-Consumerism AI</div>
+        </div>
+        <div class="loading-wrap">
+          <span class="think-icon">🧠</span>
+          <div class="think-title">哲學家正在思考中…</div>
+          <div class="think-sub">正在從知識庫檢索最相關的<br>哲學論據來對付你的購買欲望</div>
+          <div class="prog-track"><div class="prog-inner"></div></div>
+          <div>
+            <div class="step-item done"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span>接收商品資訊</span></div>
+            <div class="step-item done"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span>語義萃取：識別消費欲望類型</span></div>
+            <div class="step-item cur"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg><span>RAG 檢索：搜尋相關哲學文本…</span></div>
+            <div class="step-item"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span>組合 Prompt，召喚哲學家</span></div>
+            <div class="step-item"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>生成諮商回覆</span></div>
+          </div>
+        </div>
+        <div class="disclaimer">通常需要 5–10 秒 · 請稍候</div>
+      </div>
+      <div class="receipt-zigzag"></div>
+    </div>
+
+    <!-- ③ 回覆 -->
+    <div class="panel" id="p2" role="tabpanel">
+      <div class="receipt">
+        <div class="receipt-header">
+          <div class="logo-row"><span class="logo-icon">🧾</span><span class="store-name">物慾退燒指南</span></div>
+          <div class="store-sub">反消費主義哲學諮商系統 · Anti-Consumerism AI</div>
+        </div>
+
+        <div class="resp-top">
+          <div class="mode-tag">
+            <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span id="resp-mode-name">犀利點醒模式</span>
+          </div>
+          <button class="redo-btn" onclick="goPanel(0)">
+            <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.78"/></svg>
+            重新諮商
+          </button>
+        </div>
+
+        <div class="intent-tag">
+          <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          <span id="intent-text">欲望類型：分析中…</span>
+        </div>
+
+        <div class="warn-box" id="warn-box" style="display:none;">
+          <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="warn-txt" id="warn-txt"></div>
+        </div>
+
+        <!-- 對話泡泡區 -->
+        <div class="chat-area" id="chat-area"></div>
+
+        <!-- 哲學引用 -->
+        <div class="cite-title" id="cite-title-el" style="display:none;">
+          <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          哲學引用來源
+        </div>
+        <div id="citations-list"></div>
+
+        <!-- 追問區 -->
+        <div class="followup-area" id="followup-area" style="display:none;">
+          <div class="followup-label">
+            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            有其他想法？繼續跟哲學家說
+          </div>
+          <div class="followup-row">
+            <textarea class="followup-input" id="followup-input" placeholder="例：但我真的很需要它來工作…"></textarea>
+            <button class="followup-send" onclick="handleFollowup()">
+              <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+          <div class="followup-hint">Ctrl + Enter 快速送出</div>
+        </div>
+
+        <!-- 最終決策區 -->
+        <div class="decision-section" id="decision-section">
+          <div class="decision-label">
+            <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            最終決策
+          </div>
+          <div class="decision-btns">
+            <button class="dec-btn bought" onclick="handleDecision('bought')">
+              <span class="dec-btn-icon">💸</span>
+              <span>腦波弱，還是買了</span>
+            </button>
+            <button class="dec-btn saved" onclick="handleDecision('saved')">
+              <span class="dec-btn-icon">🛡️</span>
+              <span>我忍住了，省下這筆！</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="act-btn" onclick="goPanel(0)">
+            <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            換商品
+          </button>
+          <button class="act-btn" onclick="goPanel(0)">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+            換強度
+          </button>
+          <button class="act-btn pri" onclick="shareResult()">
+            <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            分享
+          </button>
+        </div>
+
+        <div class="disclaimer">諮商完成 · 請等待衝動消退後再做決定</div>
+      </div>
+      <div class="receipt-zigzag"></div>
+    </div>
+
+  </div><!-- /wrap -->
+    </div><!-- /main-col -->
+  </div><!-- /app-content-row -->
+
+</div><!-- /app -->
+
+<!-- 防禦大回饋 Overlay -->
+<div class="celebrate-overlay" id="celebrate-overlay" onclick="closeCelebrate()">
+  <div class="confetti-wrap" id="confetti-wrap"></div>
+  <div class="celebrate-box" onclick="event.stopPropagation()">
+    <span class="celebrate-emoji" id="celebrate-emoji">🛡️</span>
+    <div class="celebrate-title" id="celebrate-title">意志力 MAX！</div>
+    <div class="celebrate-subtitle" id="celebrate-subtitle">你成功抵抗了消費主義的誘惑<br>斯多葛哲人正在為你鼓掌</div>
+    <div class="celebrate-quote" id="celebrate-quote">
+      <span id="celebrate-quote-text"></span>
+      <span class="celebrate-quote-src" id="celebrate-quote-src"></span>
+    </div>
+    <div class="celebrate-saved-amt" id="celebrate-amt" style="display:none"></div>
+    <div class="celebrate-saved-lbl" id="celebrate-lbl" style="display:none">成功省下</div>
+    <button class="celebrate-close" id="celebrate-close" onclick="closeCelebrate()">繼續守護我的錢包 💪</button>
+  </div>
+</div>
+
+<!-- 互動小精靈 -->
+<div class="owl-sprite" id="owl-sprite" onclick="owlSpeak()" title="點我說一句哲學幹話">🦉</div>
+<div class="owl-bubble" id="owl-bubble"></div>
+
+<script>
+/*const API_URL      = 'http://localhost:8000/analyze/stream';
+const FOLLOWUP_URL = 'http://localhost:8000/analyze/stream';*/
+const API_URL      = 'https://final-project-5ppe.onrender.com/analyze';
+const FOLLOWUP_URL = 'https://final-project-5ppe.onrender.com/analyze';
+
+let isDark   = true;
+let curMode  = 'sharp';
+let timerInterval = null;
+let timerSeconds  = 72 * 3600;
+let timerStarted  = false;
+let chatHistory   = [];
+let isLoading     = false;
+
+const modeLabels = {gentle:'溫柔勸退 (gentle)',sharp:'犀利點醒 (sharp)',brutal:'靈魂拷問 (brutal)'};
+const modeNames  = {gentle:'溫柔勸退模式',sharp:'犀利點醒模式',brutal:'靈魂拷問模式'};
+
+/* ── theme ── */
+function toggleTheme(){
+  isDark = !isDark;
+  document.documentElement.setAttribute('data-theme', isDark ? '' : 'light');
+}
+
+/* ── welcome ↔ app ── */
+function enterApp(){
+  document.getElementById('welcome').style.display = 'none';
+  document.getElementById('app').classList.add('active');
+}
+function goWelcome(){
+  document.getElementById('app').classList.remove('active');
+  document.getElementById('welcome').style.display = 'flex';
+}
+
+/* ── panels ── */
+function goPanel(idx){
+  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===idx));
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+}
+
+/* ── mode ── */
+function selMode(m){
+  curMode = m;
+  ['gentle','sharp','brutal'].forEach(k=>{
+    document.getElementById('m-'+k).classList.toggle('active',k===m);
+  });
+  document.getElementById('mode-disp').textContent = modeLabels[m];
+}
+
+/* ── timer（只啟動一次，不重置）── */
+function startTimer(){
+  if(timerStarted) return;
+  timerStarted = true;
+  function tick(){
+    const h = String(Math.floor(timerSeconds/3600)).padStart(2,'0');
+    const m = String(Math.floor((timerSeconds%3600)/60)).padStart(2,'0');
+    const s = String(timerSeconds%60).padStart(2,'0');
+    const d = h+':'+m+':'+s;
+    document.getElementById('timer-main').textContent = d;
+    document.getElementById('timer-resp').textContent = d;
+    if(timerSeconds>0) timerSeconds--;
+  }
+  tick();
+  timerInterval = setInterval(tick,1000);
+}
+
+/* ── chat bubble ── */
+function addBubble(role, text, streaming){
+  const area = document.getElementById('chat-area');
+  const wrap  = document.createElement('div');
+  wrap.className = 'bubble-wrap';
+  const roleEl = document.createElement('div');
+  roleEl.className = 'bubble-role';
+  roleEl.innerHTML = role==='user'
+    ? `<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> 你`
+    : `<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><path d="m8 21 4-4 4 4"/><path d="M2 17h20"/></svg> 哲學諮商`;
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble'+(role==='user'?' user':'');
+  bubble.innerHTML = streaming ? '<span class="cursor"></span>' : text.replace(/\n/g,'<br>');
+  wrap.appendChild(roleEl);
+  wrap.appendChild(bubble);
+  area.appendChild(wrap);
+  area.scrollTop = area.scrollHeight;
+  return bubble;
+}
+
+/* ── first submit ── */
+async function handleSubmit(){
+  const product = document.getElementById('product').value.trim();
+  const reason  = document.getElementById('reason').value.trim();
+  const errBox  = document.getElementById('error-msg');
+  if(!product||!reason){ errBox.classList.add('show'); return; }
+  errBox.classList.remove('show');
+
+  startTimer();  /* 72小時只啟動一次 */
+  chatHistory = [];
+  document.getElementById('chat-area').innerHTML = '';
+  document.getElementById('citations-list').innerHTML = '';
+  document.getElementById('cite-title-el').style.display = 'none';
+  document.getElementById('followup-area').style.display = 'none';
+  document.getElementById('warn-box').style.display = 'none';
+  document.getElementById('intent-text').textContent = '欲望類型：分析中…';
+  document.getElementById('resp-mode-name').textContent = modeNames[curMode];
+
+  addBubble('user',`商品：${product}\n理由：${reason}`,false);
+  chatHistory.push({role:'user',text:`商品：${product}，理由：${reason}`});
+  goPanel(1);
+
+  try{
+    const res = await fetch(API_URL,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({product,reason,mode:curMode})
+    });
+    if(!res.ok) throw new Error('API 回應錯誤：'+res.status);
+    goPanel(2);
+    await streamToChat(res,true);
+  }catch(err){
+    goPanel(2);
+    addBubble('ai','連線失敗：'+err.message+'\n請確認後端伺服器已啟動。',false);
+    document.getElementById('followup-area').style.display = 'block';
+    showDecisionSection();
+  }
+}
+
+/* ── follow-up（同一商品繼續諮商）── */
+async function handleFollowup(){
+  if(isLoading) return;
+  const input = document.getElementById('followup-input');
+  const text  = input.value.trim();
+  if(!text) return;
+  input.value = '';
+  isLoading = true;
+  document.getElementById('followup-area').style.display = 'none';
+
+  addBubble('user',text,false);
+  chatHistory.push({role:'user',text});
+
+  try{
+    const product = document.getElementById('product').value.trim();
+    const res = await fetch(FOLLOWUP_URL,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({product,reason:text,mode:curMode})
+    });
+    if(!res.ok) throw new Error('API 回應錯誤：'+res.status);
+    await streamToChat(res,false);
+  }catch(err){
+    addBubble('ai','連線失敗：'+err.message,false);
+  }
+  isLoading = false;
+}
+
+/* ── stream ── */
+async function streamToChat(res,isFirst){
+  const area = document.getElementById('chat-area');
+  const bubble = addBubble('ai','',true);
+
+  try{
+    const data = await res.json();
+    const fullText = data.response_text || '';
+
+    if(isFirst&&data.intent_type) document.getElementById('intent-text').textContent='欲望類型：'+data.intent_type;
+    if(isFirst&&data.warning_flag) showWarning(data.warning_flag);
+    if(isFirst&&data.citations)    renderCitations(data.citations);
+
+    bubble.innerHTML = fullText.replace(/\n/g,'<br>');
+    area.scrollTop = area.scrollHeight;
+    chatHistory.push({role:'ai',text:fullText});
+  }catch(e){
+    bubble.innerHTML = '回覆解析失敗：'+e.message;
+  }
+  document.getElementById('followup-area').style.display = 'block';
+  showDecisionSection();
+}
+
+function showWarning(flag){
+  if(!flag) return;
+  document.getElementById('warn-txt').textContent = flag;
+  document.getElementById('warn-box').style.display = 'flex';
+}
+
+function renderCitations(citations){
+  document.getElementById('cite-title-el').style.display = 'flex';
+  document.getElementById('citations-list').innerHTML = citations.map(c=>`
+    <div class="cite-item">
+      <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--t5);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round">
+        <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/>
+        <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/>
+      </svg>
+      <div>${escHtml(c)}<span class="cite-src">— 知識庫引用</span></div>
+    </div>`).join('');
+}
+
+function shareResult(){
+  const bubbles = document.querySelectorAll('#chat-area .bubble:not(.user)');
+  const last = bubbles[bubbles.length-1];
+  const text = last ? last.innerText : '';
+  if(navigator.share){ navigator.share({title:'物慾退燒指南',text}); }
+  else if(navigator.clipboard){ navigator.clipboard.writeText(text).then(()=>alert('已複製諮商結果！')); }
+}
+
+function escHtml(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){
+    const fa = document.getElementById('followup-area');
+    if(fa&&fa.style.display!=='none') handleFollowup();
+  }
+});
+
+/* ══════════════════════════
+   決策 & 省錢記帳本
+══════════════════════════ */
+let savingsItems = [];
+let savingsTotal = 0;
+
+function showDecisionSection(){
+  document.getElementById('decision-section').classList.add('show');
+}
+
+function handleDecision(type){
+  const product = document.getElementById('product').value.trim();
+  const amtRaw  = document.getElementById('price-input') ? document.getElementById('price-input').value.trim() : '';
+  const amount  = parseInt(amtRaw.replace(/[^0-9]/g,''))||0;
+
+  document.getElementById('decision-section').classList.remove('show');
+
+  if(type==='saved'){
+    const item = { name: product||'未知商品', amount, date: new Date().toLocaleDateString('zh-Hant',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) };
+    savingsItems.unshift(item);
+    savingsTotal += amount;
+    renderSavings();
+    owlFeedback('saved');
+    showCelebrate('saved', product||'未知商品', amount);
+  } else {
+    owlFeedback('bought');
+    showCelebrate('bought', product||'未知商品', amount);
+  }
+}
+
+function resetToInput(){
+  // 清空輸入欄
+  document.getElementById('product').value = '';
+  document.getElementById('reason').value = '';
+  const priceEl = document.getElementById('price-input');
+  if(priceEl) priceEl.value = '';
+  document.getElementById('error-msg').classList.remove('show');
+  // 重設回覆區狀態
+  document.getElementById('chat-area').innerHTML = '';
+  document.getElementById('citations-list').innerHTML = '';
+  document.getElementById('cite-title-el').style.display = 'none';
+  document.getElementById('followup-area').style.display = 'none';
+  document.getElementById('warn-box').style.display = 'none';
+  document.getElementById('decision-section').classList.remove('show');
+  // 切回輸入面板
+  goPanel(0);
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function renderSavings(){
+  const list  = document.getElementById('savings-list');
+  const empty = document.getElementById('savings-empty');
+  const total = document.getElementById('savings-total');
+  const count = document.getElementById('savings-count');
+
+  total.textContent = 'NT$ ' + savingsTotal.toLocaleString();
+  count.textContent = '共 ' + savingsItems.length + ' 筆記錄';
+
+  if(savingsItems.length===0){
+    list.innerHTML = '<div class="savings-empty" id="savings-empty">還沒有成功忍住的記錄。<br>第一筆等你來寫下！</div>';
+    return;
+  }
+
+  list.innerHTML = savingsItems.map((it,i)=>`
+    <div class="savings-item" style="animation-delay:${i*.05}s">
+      <div class="savings-item-top">
+        <span class="savings-item-name">
+          <span class="savings-item-num">${savingsItems.length - i}</span>${escHtml(it.name)}
+        </span>
+        <span class="savings-item-amt">${it.amount>0 ? 'NT$&nbsp;'+it.amount.toLocaleString() : '省下了！'}</span>
+      </div>
+      <div class="savings-item-date">🕐 ${it.date}</div>
+    </div>`).join('');
+}
+
+/* ══════════════════════════
+   防禦大回饋
+══════════════════════════ */
+const celebrateData = {
+  saved: [
+    {
+      title: '意志力 MAX！',
+      sub:   '你剛剛選擇了理性\n而不是市場的精心設計',
+      quote: '「你擁有超越身外之物的力量——只要你決定不去渴望它。」',
+      src:   '— Marcus Aurelius《沉思錄》第 9 卷'
+    },
+    {
+      title: '哲學防線，守住了！',
+      sub:   '斯多葛哲人說：\n自制才是真正的自由',
+      quote: '「貧窮不是缺乏財富，而是欲望無窮。」',
+      src:   '— Epicurus，引自 Seneca《書信集》第 2 封'
+    },
+    {
+      title: '消費欲望：已擊退！',
+      sub:   '你今天拒絕了一個符號\n不是一件商品',
+      quote: '「人們購買的不是商品本身，而是商品背後的符號差異。」',
+      src:   '— Jean Baudrillard《消費社會》1970'
+    },
+    {
+      title: '你的錢包感謝你！',
+      sub:   '省下的不只是金錢\n是對未來自己的承諾',
+      quote: '「財富不在於擁有大量財產，而在於擁有少量欲望。」',
+      src:   '— Epictetus《語錄》第 3 卷第 24 章'
+    },
+    {
+      title: '斯多葛認證：理性勝利',
+      sub:   '衝動只是一時的\n清醒是永遠的',
+      quote: '「一個人若能控制自己的欲望，便是這世上最自由的人。」',
+      src:   '— Seneca《論心靈的平靜》第 8 章'
+    },
+  ],
+  bought: [
+    {
+      title: '誠實是美德',
+      sub:   '承認購買本身就是\n一種誠實的覺察',
+      quote: '「大多數人並非因為需要，而是因為鄰居買了，才去購買。」',
+      src:   '— Seneca《書信集》第 123 封'
+    },
+    {
+      title: '覺察即是進步',
+      sub:   '你知道自己買了\n這比盲目消費更進一步',
+      quote: '「人們不是被事物本身困擾，而是被對事物的看法困擾。」',
+      src:   '— Epictetus《手冊》第 5 章'
+    },
+    {
+      title: '下次可以更好',
+      sub:   '消費已發生\n但下一次的你已經更清醒',
+      quote: '「真正重要的不是你的處境，而是你如何看待它。」',
+      src:   '— Marcus Aurelius《沉思錄》第 7 卷'
+    },
+    {
+      title: '人非聖賢，偶爾失守',
+      sub:   '布希亞也說\n消費是現代人的語言',
+      quote: '「消費是一種主動的集體行為，是一種約束、道德和溝通。」',
+      src:   '— Jean Baudrillard《消費社會》1970'
+    },
+  ],
+};
+
+function showCelebrate(type, name, amount){
+  const isSaved = (type === 'saved');
+  const accent  = isSaved ? '#5aab3a' : '#c85a48';
+  const overlay = document.getElementById('celebrate-overlay');
+  const box     = overlay.querySelector('.celebrate-box');
+  const pool    = celebrateData[type];
+  const pick    = pool[Math.floor(Math.random() * pool.length)];
+
+  document.getElementById('celebrate-emoji').textContent    = isSaved ? '🛡️' : '💸';
+  const titleEl = document.getElementById('celebrate-title');
+  titleEl.textContent = pick.title;
+  titleEl.style.color = accent;
+
+  document.getElementById('celebrate-subtitle').textContent = pick.sub;
+  document.getElementById('celebrate-quote-text').textContent = pick.quote;
+  document.getElementById('celebrate-quote-src').textContent  = pick.src;
+
+  const amtEl = document.getElementById('celebrate-amt');
+  const lblEl = document.getElementById('celebrate-lbl');
+  if(amount > 0){
+    amtEl.textContent   = 'NT$ ' + amount.toLocaleString();
+    amtEl.style.color   = accent;
+    amtEl.style.display = 'block';
+    lblEl.textContent   = isSaved ? '成功省下' : '花掉了';
+    lblEl.style.display = 'block';
+  } else {
+    amtEl.style.display = 'none';
+    lblEl.style.display = 'none';
+  }
+
+  const closeBtn = document.getElementById('celebrate-close');
+  closeBtn.textContent      = isSaved ? '繼續守護我的錢包 💪' : '好，諮詢下一件商品';
+  closeBtn.style.background = accent;
+
+  box.style.borderColor = accent;
+  box.style.boxShadow   = `0 8px 60px rgba(0,0,0,.45), 0 0 48px ${accent}33`;
+
+  overlay.style.display = 'flex';
+  void overlay.offsetHeight;
+  overlay.classList.add('show');
+
+  if(isSaved) launchConfetti();
+}
+
+function closeCelebrate(){
+  const overlay = document.getElementById('celebrate-overlay');
+  overlay.classList.remove('show');
+  document.getElementById('confetti-wrap').innerHTML = '';
+  resetToInput();
+}
+
+function launchConfetti(){
+  const wrap   = document.getElementById('confetti-wrap');
+  wrap.innerHTML = '';
+  const colors = ['#5aab3a','#c8a96e','#d4b87a','#60c878','#f0c040','#78c8f0','#a0d8ef','#ffe066'];
+  for(let i = 0; i < 90; i++){
+    const el    = document.createElement('div');
+    el.className = 'confetti-piece';
+    const color  = colors[Math.floor(Math.random() * colors.length)];
+    const size   = 6 + Math.random() * 10;
+    const left   = Math.random() * 100;
+    const delay  = Math.random() * 1.4;
+    const dur    = 2.0 + Math.random() * 2.2;
+    const shape  = Math.random() > .45 ? '50%' : '3px';
+    el.style.cssText = `left:${left}%;width:${size}px;height:${size}px;background:${color};border-radius:${shape};animation-duration:${dur}s;animation-delay:${delay}s;`;
+    wrap.appendChild(el);
+  }
+  setTimeout(() => { if(wrap) wrap.innerHTML = ''; }, 5200);
+}
+
+
+/* ══════════════════════════
+   貓頭鷹小精靈
+══════════════════════════ */
+const owlQuotes = [
+  '購買之前，問自己：五年後，你還記得它嗎？',
+  '你買的是商品，還是那個「買了就會快樂」的幻覺？',
+  '布希亞說：你消費的不是物品，而是符號。你想成為什麼符號？',
+  '錢可以再賺，但每次衝動消費都是對未來自我的一次背叛。',
+  '馬可·奧理略說：只有美德是真正的財富。',
+  '斯多葛的智慧：若失去它你依然完整，那你並不真正需要它。',
+  '人類是唯一會為了自己不需要的東西工作的生物。',
+  '「特價」只是商家讓你快速停止思考的工具。',
+  '每件物品都帶來責任感——清潔、維護、後悔。',
+  '三天後，你還會記得自己為何想要它嗎？',
+];
+
+let owlTimeout = null;
+let isSpeaking = false;
+
+function owlSpeak(msg){
+  if(isSpeaking) return;
+  const text = msg || owlQuotes[Math.floor(Math.random()*owlQuotes.length)];
+  const bubble = document.getElementById('owl-bubble');
+  bubble.innerHTML = `<span class="owl-tts-indicator"></span>${escHtml(text)}`;
+  bubble.classList.add('show');
+
+  if('speechSynthesis' in window){
+    isSpeaking = true;
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'zh-TW';
+    utter.rate = 0.9;
+    utter.pitch = 1.05;
+    utter.onend = ()=>{ isSpeaking=false; };
+    utter.onerror = ()=>{ isSpeaking=false; };
+    window.speechSynthesis.speak(utter);
+  }
+
+  clearTimeout(owlTimeout);
+  owlTimeout = setTimeout(()=>{
+    bubble.classList.remove('show');
+  }, 5000);
+}
+
+function owlFeedback(type){
+  const savedMsgs = [
+    '🎉 太棒了！你的自制力讓斯多葛哲人們感到驕傲！',
+    '🛡️ 守住了！這筆錢屬於未來更好的你。',
+    '✨ 你剛剛打敗了消費主義的一次進攻！',
+  ];
+  const boughtMsgs = [
+    '😔 沒關係……下次衝動來臨前，再來找我。',
+    '💸 至少你誠實地承認了。布希亞也理解人類的脆弱。',
+    '🌀 消費已發生，但覺察本身就是成長的開始。',
+  ];
+  const msgs = type==='saved' ? savedMsgs : boughtMsgs;
+  owlSpeak(msgs[Math.floor(Math.random()*msgs.length)]);
+}
+</script>
+</body>
+</html>
